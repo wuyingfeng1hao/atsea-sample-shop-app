@@ -3,7 +3,13 @@ version: "3.1"
 services:
   reverse_proxy:
     build: ./reverse_proxy
-    user: nginx
+    #user: nginx
+    depends_on:
+      - "appserver"
+    ports:
+      - 80:80
+    networks:
+      - front-tier
 
   database:
     build: 

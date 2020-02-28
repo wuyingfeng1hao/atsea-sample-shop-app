@@ -1,5 +1,7 @@
 FROM node:latest AS storefront
 WORKDIR /usr/src/atsea/app/react-app
+ENV http_proxy=http://10.178.148.69:3128
+ENV https_proxy=http://10.178.148.69:3128
 COPY react-app .
 RUN npm install
 RUN npm run build
@@ -7,6 +9,7 @@ RUN npm run build
 FROM maven:latest AS appserver
 WORKDIR /usr/src/atsea
 COPY pom.xml .
+COPY settings-docker.xml /usr/share/maven/ref/ 
 RUN mvn -B -f pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:resolve
 COPY . .
 RUN mvn -B -s /usr/share/maven/ref/settings-docker.xml package -DskipTests
